@@ -8055,7 +8055,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 24
+  m_RootOrder: 25
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &567847531
 GameObject:
@@ -15579,6 +15579,36 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 18
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1185620872
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 1880361744807976, guid: af877f03ac5ffe747a8f44044981a970,
+    type: 2}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 1185620873}
+  m_Layer: 0
+  m_Name: TagSpawnerLocation
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1185620873
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 4994018470429588, guid: af877f03ac5ffe747a8f44044981a970,
+    type: 2}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1185620872}
+  m_LocalRotation: {x: -0, y: -0, z: 0.13052596, w: 0.9914449}
+  m_LocalPosition: {x: -0.6951, y: 1.8488, z: -0.5986}
+  m_LocalScale: {x: 0.13900001, y: 0.027800001, z: 0.06950001}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 23
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 15.000001}
 --- !u!1 &1206033841
 GameObject:
   m_ObjectHideFlags: 0
@@ -16538,6 +16568,24 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1257143393}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1262741203 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 100032, guid: cfca92e6f49184f1197861564abd5669, type: 3}
+  m_PrefabInternal: {fileID: 441681481}
+--- !u!64 &1262741204
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1262741203}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Convex: 0
+  m_InflateMesh: 0
+  m_SkinWidth: 0.01
+  m_Mesh: {fileID: 4300000, guid: cfca92e6f49184f1197861564abd5669, type: 3}
 --- !u!1 &1265378388
 GameObject:
   m_ObjectHideFlags: 0
@@ -25477,7 +25525,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pointerToggleButton: 10
   pointerSetButton: 10
-  grabToggleButton: 8
+  grabToggleButton: 1
   useToggleButton: 3
   uiClickButton: 3
   menuToggleButton: 14
@@ -25523,7 +25571,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 947b27445602ed640b885db7e667dfc1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  grabButton: 4
+  grabButton: 1
   grabPrecognition: 0
   throwMultiplier: 1
   createRigidBodyWhenNotTouching: 1
@@ -25920,13 +25968,13 @@ RectTransform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 2078949263}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 270, y: 139, z: 0}
+  m_LocalPosition: {x: 247, y: 139, z: 0}
   m_LocalScale: {x: 0.9266667, y: 0.9266667, z: 0.9266667}
   m_Children:
   - {fileID: 885494309}
   - {fileID: 1614959140}
   m_Father: {fileID: 0}
-  m_RootOrder: 23
+  m_RootOrder: 24
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}

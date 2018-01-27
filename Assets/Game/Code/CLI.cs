@@ -161,7 +161,8 @@ public class CLI : MonoBehaviour {
                 m_guessedInitial = ' ';
                 m_guessedFeatures = new int[] { -1, -1, -1, -1, -1, -1 };
                 m_CLItext.text = "Printing tag...";
-
+                GameObject tagLocation = GameObject.Find("TagSpawnerLocation");
+                Instantiate((GameObject)Resources.Load("Tag"), tagLocation.transform.position, tagLocation.transform.rotation);
                 commandFound = true;
                 break;
         }
