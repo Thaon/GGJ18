@@ -9,9 +9,13 @@ public class BoxCustomizer : MonoBehaviour {
     public Text m_productNameTxt;
     public Image m_iconImg;
     public Sprite[] m_images;
+    public Transform[] m_waypoints;
+    public bool m_canMove = true;
+    public bool m_hasTag = false;
 
     private Box m_selectedBox;
     private Material m_mat;
+    private int m_waypointsCounter = 0;
 
     #endregion
 
@@ -31,7 +35,29 @@ public class BoxCustomizer : MonoBehaviour {
 	
 	void Update ()
     {
-		
+		if (m_canMove)
+        {
+            if (Vector3.Distance(transform.position, m_waypoints[m_waypointsCounter].transform.position) > .5f)
+                transform.position = Vector3.MoveTowards(transform.position, m_waypoints[m_waypointsCounter].position, 5 * Time.deltaTime);
+            else
+            {
+                m_waypointsCounter ++;
+                m_canMove = false;
+            }
+        }
+
+        if (Vector3.Distance(transform.position, m_waypoints[1].transform.position) < 1.0f)
+        {
+            //we reached the last point, check if there is a tag on the box and if it is correct
+            if (m_hasTag && FindObjectOfType<CLI>().m_correctlyGuessed)
+                FindObjectOfType<CLI>().m_points += 100;
+            else
+                FindObjectOfType<CLI>().m_points -= 50;
+
+            //remove the box
+            FindObjectOfType<BoxSpawner>().m_boxInstance = null;
+            Destroy(this.gameObject);
+        }
 	}
 
     private void SetSize(string size)
@@ -91,5 +117,10 @@ public class BoxCustomizer : MonoBehaviour {
         string[] nameSections = name.Split(' ');
         int ran = Random.Range(0, 2);
         return nameSections[ran][0];
+    }
+
+    public void SendBox()
+    {
+        m_canMove = true;
     }
 }

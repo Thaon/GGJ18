@@ -33,6 +33,10 @@ public class CLI : MonoBehaviour {
     public List<string> m_icons; //image
     public List<string> m_productNames;
     public Box m_selectedBox;
+    public bool m_correctlyGuessed = false;
+
+    public int m_points = 0;
+
 
     private int m_trueBox;
     private int[] m_guessedFeatures = { -1, -1, -1, -1, -1, -1 };
@@ -81,6 +85,10 @@ public class CLI : MonoBehaviour {
 
         switch (comm[0].ToLower())
         {
+            case "start":
+
+                break;
+
             case "help":
                 m_CLItext.text = "The following filters can be added to the search algorithm: \n - SIZE [small | medium | big] \n - SHAPE [box | tube | pyramid] \n - COLOUR [ multiple ] \n - NAME [ multiple, initials ] \n - ICON [ multiple ] \n - PRODUCT [ multiple ]";
                 commandFound = true;
@@ -129,9 +137,15 @@ public class CLI : MonoBehaviour {
                 m_CLItext.text = "Printing tag for box number " + toPrint;
 
                 if (toPrint == m_trueBox)
+                {
+                    m_correctlyGuessed = true;
                     Debug.Log("Correct guess");
+                }
                 else
+                {
+                    m_correctlyGuessed = false;
                     Debug.Log("Wrong guess");
+                }
 
                 //reset features and display an empty screen
                 m_guessedInitial = ' ';
