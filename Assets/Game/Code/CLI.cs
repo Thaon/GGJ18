@@ -72,8 +72,7 @@ public class CLI : MonoBehaviour {
         switch (comm[0].ToLower())
         {
             case "reset":
-                m_guessedFeatures = { -1, -1, -1, -1, -1, -1 };
-                return -1;
+                m_guessedFeatures = new int[] { -1, -1, -1, -1, -1, -1 };
                 break;
 
             case "size":
