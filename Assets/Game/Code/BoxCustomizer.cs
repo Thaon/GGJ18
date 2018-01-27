@@ -23,7 +23,7 @@ public class BoxCustomizer : MonoBehaviour {
     {
         CLI cli = FindObjectOfType<CLI>();
         m_selectedBox = cli.m_selectedBox;
-        m_mat = GetComponent<MeshRenderer>().sharedMaterial;
+        m_mat = GetComponentInChildren<MeshRenderer>().sharedMaterial;
 
 
         SetSize(cli.m_sizes[m_selectedBox.m_features[0]]);
@@ -37,7 +37,7 @@ public class BoxCustomizer : MonoBehaviour {
     {
 		if (m_canMove)
         {
-            if (Vector3.Distance(transform.position, m_waypoints[m_waypointsCounter].transform.position) > .5f)
+            if (Vector3.Distance(transform.position, m_waypoints[m_waypointsCounter].transform.position) > .1f)
                 transform.position = Vector3.MoveTowards(transform.position, m_waypoints[m_waypointsCounter].position, 5 * Time.deltaTime);
             else
             {
@@ -56,6 +56,8 @@ public class BoxCustomizer : MonoBehaviour {
 
             //remove the box
             FindObjectOfType<BoxSpawner>().m_boxInstance = null;
+            FindObjectOfType<CLI>().GenerateNewBox();
+
             Destroy(this.gameObject);
         }
 	}
@@ -69,7 +71,7 @@ public class BoxCustomizer : MonoBehaviour {
                 break;
 
             case "big":
-                transform.localScale *= 2;
+                transform.localScale *= 1.5f;
                 break;
         }
     }

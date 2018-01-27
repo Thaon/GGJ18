@@ -6,8 +6,10 @@ public class BoxSpawner : MonoBehaviour {
 
     #region member variables
 
+    [HideInInspector]
     public GameObject m_boxInstance;
     public Transform m_spawningPosition;
+    public Transform[] m_waypoints;
 
     private GameObject m_boxPrefab;
     private bool m_gameStarted = false;
@@ -17,7 +19,7 @@ public class BoxSpawner : MonoBehaviour {
 
     void Start ()
     {
-        m_boxPrefab = Resources.Load("Box") as GameObject;
+        m_boxPrefab = Resources.Load("BoxRB") as GameObject;
 	}
 	
 	void Update ()
@@ -32,5 +34,7 @@ public class BoxSpawner : MonoBehaviour {
     public void SpawnBox()
     {
         m_boxInstance = Instantiate(m_boxPrefab, m_spawningPosition.position, Quaternion.identity);
+        m_boxInstance.GetComponent<BoxCustomizer>().m_waypoints = m_waypoints;
+        m_gameStarted = true;
     }
 }

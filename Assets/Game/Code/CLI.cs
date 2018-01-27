@@ -55,6 +55,15 @@ public class CLI : MonoBehaviour {
         m_icons = ReadFeaturesFromFile("icons.txt");
         m_productNames = ReadFeaturesFromFile("productnames.txt");
 
+        GenerateNewBox();
+    }
+
+    public void GenerateNewBox()
+    {
+        //reset CLI variables
+        m_guessedInitial = ' ';
+        m_guessedFeatures = new int[] { -1, -1, -1, -1, -1, -1 };
+
         //generate selected box
         int size = Random.Range(0, m_sizes.Count);
         int shape = Random.Range(0, m_shapes.Count);
@@ -86,7 +95,8 @@ public class CLI : MonoBehaviour {
         switch (comm[0].ToLower())
         {
             case "start":
-
+                FindObjectOfType<BoxSpawner>().SpawnBox();
+                commandFound = true;
                 break;
 
             case "help":
