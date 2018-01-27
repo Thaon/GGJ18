@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class BoxCustomizer : MonoBehaviour {
@@ -12,10 +13,13 @@ public class BoxCustomizer : MonoBehaviour {
     public Transform[] m_waypoints;
     public bool m_canMove = true;
     public bool m_hasTag = false;
+    public float m_timeUntilDestruction;
 
     private Box m_selectedBox;
     private Material m_mat;
     private int m_waypointsCounter = 0;
+    private Text m_timerText;
+    private float m_timer = 0;
 
     #endregion
 
@@ -25,12 +29,14 @@ public class BoxCustomizer : MonoBehaviour {
         m_selectedBox = cli.m_selectedBox;
         m_mat = GetComponentInChildren<MeshRenderer>().sharedMaterial;
 
-
         SetSize(cli.m_sizes[m_selectedBox.m_features[0]]);
         SetColour(cli.m_colours[m_selectedBox.m_features[2]]);
         m_nameTxt.text = GetRandomInitial(cli.m_names[m_selectedBox.m_features[3]]).ToString();
         m_iconImg.sprite = m_images[m_selectedBox.m_features[4]];
         m_productNameTxt.text = cli.m_productNames[m_selectedBox.m_features[5]];
+
+        m_timerText = GameObject.Find("TimerText").GetComponent<Text>();
+        m_timer = m_timeUntilDestruction;
     }
 	
 	void Update ()
@@ -41,6 +47,7 @@ public class BoxCustomizer : MonoBehaviour {
                 transform.position = Vector3.MoveTowards(transform.position, m_waypoints[m_waypointsCounter].position, 5 * Time.deltaTime);
             else
             {
+                StartCoroutine(KillObject());
                 m_waypointsCounter ++;
                 m_canMove = false;
             }
@@ -52,7 +59,12 @@ public class BoxCustomizer : MonoBehaviour {
             if (m_hasTag && FindObjectOfType<CLI>().m_correctlyGuessed)
                 FindObjectOfType<CLI>().m_points += 100;
             else
+            {
+                FindObjectOfType<BoxSpawner>().RemoveLife();
                 FindObjectOfType<CLI>().m_points -= 50;
+            }
+
+            Debug.Log("Points: " + FindObjectOfType<CLI>().m_points);
 
             //remove the box
             FindObjectOfType<BoxSpawner>().m_boxInstance = null;
@@ -60,7 +72,19 @@ public class BoxCustomizer : MonoBehaviour {
 
             Destroy(this.gameObject);
         }
+
+        if (m_waypointsCounter > 0)
+        {
+            m_timer -= Time.deltaTime;
+            m_timerText.text = Mathf.RoundToInt(m_timer).ToString();
+        }
 	}
+
+    private IEnumerator KillObject()
+    {
+        yield return new WaitForSeconds(m_timeUntilDestruction);
+        FindObjectOfType<BoxSpawner>().RemoveLife();
+    }
 
     private void SetSize(string size)
     {

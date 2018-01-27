@@ -36,6 +36,7 @@ public class CLI : MonoBehaviour {
     public bool m_correctlyGuessed = false;
 
     public int m_points = 0;
+    private Text m_pointsTxt;
 
 
     private int m_trueBox;
@@ -47,6 +48,8 @@ public class CLI : MonoBehaviour {
 
     void Start ()
     {
+        DontDestroyOnLoad(this.gameObject);
+
         //fill in lists
         m_sizes = ReadFeaturesFromFile("sizes.txt");
         m_shapes = ReadFeaturesFromFile("shapes.txt");
@@ -55,7 +58,15 @@ public class CLI : MonoBehaviour {
         m_icons = ReadFeaturesFromFile("icons.txt");
         m_productNames = ReadFeaturesFromFile("productnames.txt");
 
+        m_pointsTxt = GameObject.Find("PointsText").GetComponent<Text>();
+
         GenerateNewBox();
+    }
+
+    private void FixedUpdate()
+    {
+        if (m_pointsTxt != null)
+            m_pointsTxt.text = "Points: " + m_points;
     }
 
     public void GenerateNewBox()
@@ -63,6 +74,7 @@ public class CLI : MonoBehaviour {
         //reset CLI variables
         m_guessedInitial = ' ';
         m_guessedFeatures = new int[] { -1, -1, -1, -1, -1, -1 };
+        m_CLItext.text = "New Box Incoming!";
 
         //generate selected box
         int size = Random.Range(0, m_sizes.Count);
@@ -100,7 +112,7 @@ public class CLI : MonoBehaviour {
                 break;
 
             case "help":
-                m_CLItext.text = "The following filters can be added to the search algorithm: \n - SIZE [small | medium | big] \n - SHAPE [box | tube | pyramid] \n - COLOUR [ multiple ] \n - NAME [ multiple, initials ] \n - ICON [ multiple ] \n - PRODUCT [ multiple ]";
+                m_CLItext.text = "The following filters can be added to the search algorithm: \n - SIZE [small | medium | big] \n  - COLOUR [ multiple ] \n - NAME [ multiple, initials ] \n - ICON [ multiple ] \n - PRODUCT [ multiple ]";
                 commandFound = true;
                 break;
 
@@ -115,10 +127,10 @@ public class CLI : MonoBehaviour {
                 commandFound = true;
                 break;
 
-            case "shape":
-                m_guessedFeatures[1] = GetIdFromString(comm[1].ToLower(), m_shapes);
-                commandFound = true;
-                break;
+            //case "shape":
+            //    m_guessedFeatures[1] = GetIdFromString(comm[1].ToLower(), m_shapes);
+            //    commandFound = true;
+            //    break;
 
             case "colour":
                 m_guessedFeatures[2] = GetIdFromString(comm[1].ToLower(), m_colours);

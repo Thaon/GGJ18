@@ -9,8 +9,8 @@ public class TagSocket : MonoBehaviour {
         if (other.tag == "TAG")
         {
             GetComponent<MeshRenderer>().sharedMaterial.color = Color.yellow;
+            transform.GetComponentInParent<BoxCustomizer>().m_hasTag = true;
             Destroy(other.gameObject);
-            transform.parent.GetComponent<BoxCustomizer>().m_hasTag = true;
         }
     }
 }
