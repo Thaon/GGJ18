@@ -23,6 +23,8 @@ public class CLI : MonoBehaviour {
 
     #region member variables
 
+    public Text m_CLItext;
+    public InputField m_CLIinput;
     public List<string> m_sizes;
     public List<string> m_shapes;
     public List<string> m_colours;
@@ -32,13 +34,21 @@ public class CLI : MonoBehaviour {
 
     private Box m_selectedBox;
     private int[] m_guessedFeatures = { -1, -1, -1, -1, -1, -1 };
-    private Text m_text;
 
     #endregion
 
 
     void Start ()
     {
+        //fill in lists
+        m_sizes = ReadFeaturesFromFile("sizes.txt");
+        m_shapes = ReadFeaturesFromFile("shapes.txt");
+        m_colours = ReadFeaturesFromFile("colours.txt");
+        m_names = ReadFeaturesFromFile("names.txt");
+        m_icons = ReadFeaturesFromFile("icons.txt");
+        m_productNames = ReadFeaturesFromFile("productnames.txt");
+
+        //generate selected box
         int size = Random.Range(0, m_sizes.Count);
         int shape = Random.Range(0, m_shapes.Count);
         int colour = Random.Range(0, m_colours.Count);
@@ -56,13 +66,15 @@ public class CLI : MonoBehaviour {
 		
 	}
 
-    public void ReadFeaturesFromFile(string filename, List<string> featureList)
+    public List<string> ReadFeaturesFromFile(string filename)
     {
+        List<string> featureList = new List<string>();
         string[] lines = File.ReadAllLines("textfiles/" + filename);
         foreach (string line in lines)
         {
             featureList.Add(line);
         }
+        return featureList;
     }
 
     public int ParseCommand(string value, string command)
@@ -101,9 +113,9 @@ public class CLI : MonoBehaviour {
 
     public void GenerateResults()
     {
-        List<Box> results = new List<Box>(5);
-        int trueBox = Random.Range(0, results.Capacity);
-        for (int i = 0; i < results.Capacity; i++)
+        List<Box> results = new List<Box>();
+        int trueBox = Random.Range(0, 5);
+        for (int i = 0; i < 5; i++)
         {
             if (i == trueBox)
                 results.Add(m_selectedBox);
@@ -128,9 +140,11 @@ public class CLI : MonoBehaviour {
             }
         }
 
+        m_CLItext.text = "";
         foreach(Box box in results)
         {
-            Debug.Log(DescribeBox(box.m_features));
+            m_CLItext.text += "@> " + DescribeBox(box.m_features);
         }
+        Debug.Log("Selected box is number " + (trueBox + 1).ToString());
     }
 }
