@@ -25,16 +25,18 @@ public class CLI : MonoBehaviour {
 
     public Text m_CLItext;
     public InputField m_CLIinput;
+    public int m_maxResults;
     public List<string> m_sizes;
     public List<string> m_shapes;
     public List<string> m_colours;
     public List<string> m_names; //add initials only to box label
     public List<string> m_icons; //image
     public List<string> m_productNames;
+    public Box m_selectedBox;
 
-    private Box m_selectedBox;
     private int m_trueBox;
     private int[] m_guessedFeatures = { -1, -1, -1, -1, -1, -1 };
+    private char m_guessedInitial = ' ';
 
     #endregion
 
@@ -59,11 +61,6 @@ public class CLI : MonoBehaviour {
 
         m_selectedBox = new Box(size, shape, colour, name, icon, pName);
     }
-
-    void Update ()
-    {
-		
-	}
 
     public List<string> ReadFeaturesFromFile(string filename)
     {
@@ -90,6 +87,7 @@ public class CLI : MonoBehaviour {
                 break;
 
             case "reset":
+                m_guessedInitial = ' ';
                 m_guessedFeatures = new int[] { -1, -1, -1, -1, -1, -1 };
                 commandFound = true;
                 break;
@@ -110,7 +108,9 @@ public class CLI : MonoBehaviour {
                 break;
 
             case "name":
-                m_guessedFeatures[3] = GetIdFromString(comm[1].ToLower(), m_names);
+                //initials to full name mapping
+                m_guessedInitial = comm[1].ToLower()[0];
+                m_guessedFeatures[3] = MapInitials(comm[1].ToLower()[0]);
                 commandFound = true;
                 break;
 
@@ -133,6 +133,11 @@ public class CLI : MonoBehaviour {
                 else
                     Debug.Log("Wrong guess");
 
+                //reset features and display an empty screen
+                m_guessedInitial = ' ';
+                m_guessedFeatures = new int[] { -1, -1, -1, -1, -1, -1 };
+                m_CLItext.text = "Printing tag...";
+
                 commandFound = true;
                 break;
         }
@@ -150,6 +155,38 @@ public class CLI : MonoBehaviour {
         }
     }
 
+    public int MapInitials(char value)
+    {
+        string[] name = m_names[m_selectedBox.m_features[3]].Split(' ');
+        if (name[0][0] == value || name[1][0] == value)
+        {
+            m_guessedInitial = value;
+            return m_selectedBox.m_features[3];
+        }
+        else
+        {
+            m_guessedInitial = value;
+            return -1;
+        }
+    }
+
+    public int GetNameWithInitial()
+    {
+        //get a list of similar names
+        List<int> namesWithMatchingInitials = new List<int>();
+        foreach (string name in m_names)
+        {
+            string[] nameSections = name.Split(' ');
+            if (nameSections[0].ToLower()[0] == m_guessedInitial || nameSections[1].ToLower()[0] == m_guessedInitial)
+            {
+                namesWithMatchingInitials.Add(m_names.FindIndex(X => X == name));
+                Debug.Log("Found");
+            }
+        }
+        //get a random one and return it
+        return namesWithMatchingInitials[Random.Range(0, namesWithMatchingInitials.Count)];
+    }
+
     public string DescribeBox(int[] features)
     {
         return m_sizes[features[0]] + ", " + m_shapes[features[1]] + ", " + m_colours[features[2]] + ", " + m_names[features[3]] + ", " + m_icons[features[4]] + ", " + m_productNames[features[5]] + ". \n";
@@ -158,7 +195,7 @@ public class CLI : MonoBehaviour {
     public void GenerateResults()
     {
         List<Box> results = new List<Box>();
-        m_trueBox = Random.Range(0, 5);
+        m_trueBox = Random.Range(0, m_maxResults);
 
         //check wether I should hide the correct box based on guesses
         bool hide = false;
@@ -175,7 +212,7 @@ public class CLI : MonoBehaviour {
             }
         }
 
-        for (int i = 0; i < 5; i++)
+        for (int i = 0; i < m_maxResults; i++)
         {
             if (i == m_trueBox && !hide)
                 results.Add(m_selectedBox);
@@ -189,11 +226,16 @@ public class CLI : MonoBehaviour {
                 int icon = Random.Range(0, m_icons.Count);
                 int pName = Random.Range(0, m_productNames.Count);
                 Box b = new Box(size, shape, colour, name, icon, pName);
-                for (int j = 0 ; j < m_guessedFeatures.Length ; j++)
+                for (int j = 0; j < m_guessedFeatures.Length; j++)
                 {
-                    if ( m_guessedFeatures[j] != -1 )
+                    if (m_guessedFeatures[j] != -1)
                     {
                         b.m_features[j] = m_guessedFeatures[j];
+
+                        if (j == 3) //name
+                        {
+                            b.m_features[j] = GetNameWithInitial();
+                        }
                     }
                 }
                 results.Add(b);
