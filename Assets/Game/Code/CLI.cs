@@ -33,6 +33,7 @@ public class CLI : MonoBehaviour {
     public List<string> m_productNames;
 
     private Box m_selectedBox;
+    private int m_trueBox;
     private int[] m_guessedFeatures = { -1, -1, -1, -1, -1, -1 };
 
     #endregion
@@ -57,8 +58,6 @@ public class CLI : MonoBehaviour {
         int pName = Random.Range(0, m_productNames.Count);
 
         m_selectedBox = new Box(size, shape, colour, name, icon, pName);
-
-        GenerateResults();
     }
 
     void Update ()
@@ -77,25 +76,63 @@ public class CLI : MonoBehaviour {
         return featureList;
     }
 
-    public int ParseCommand(string value, string command)
+    public bool ParseCommand()
     {
+        string command = m_CLIinput.text;
         string[] comm = command.Split(' ');
+        bool commandFound = false;
 
         switch (comm[0].ToLower())
         {
             case "reset":
                 m_guessedFeatures = new int[] { -1, -1, -1, -1, -1, -1 };
+                commandFound = true;
                 break;
 
             case "size":
-                return GetIdFromString(comm[1].ToLower(), m_sizes);
+                m_guessedFeatures[0] = GetIdFromString(comm[1].ToLower(), m_sizes);
+                commandFound = true;
                 break;
 
             case "shape":
-                return GetIdFromString(comm[1].ToLower(), m_shapes);
+                m_guessedFeatures[1] = GetIdFromString(comm[1].ToLower(), m_shapes);
+                commandFound = true;
+                break;
+
+            case "colour":
+                m_guessedFeatures[2] = GetIdFromString(comm[1].ToLower(), m_colours);
+                commandFound = true;
+                break;
+
+            case "name":
+                m_guessedFeatures[3] = GetIdFromString(comm[1].ToLower(), m_names);
+                commandFound = true;
+                break;
+
+            case "icon":
+                m_guessedFeatures[4] = GetIdFromString(comm[1].ToLower(), m_icons);
+                commandFound = true;
+                break;
+
+            case "product":
+                m_guessedFeatures[5] = GetIdFromString(comm[1].ToLower(), m_productNames);
+                commandFound = true;
+                break;
+
+            case "print":
+                int toPrint = int.Parse(comm[1]);
+                m_CLItext.text = "Printing tag for box number " + toPrint;
+
+                if (toPrint == m_trueBox)
+                    Debug.Log("Correct guess");
+                else
+                    Debug.Log("Wrong guess");
+
+                commandFound = true;
                 break;
         }
-        return -1;
+        m_CLIinput.text = "";
+        return commandFound;
     }
 
     public int GetIdFromString(string value, List<string> list)
@@ -103,7 +140,9 @@ public class CLI : MonoBehaviour {
         if (list.Contains(value))
             return list.IndexOf(value);
         else
+        {
             return -1;
+        }
     }
 
     public string DescribeBox(int[] features)
@@ -114,10 +153,26 @@ public class CLI : MonoBehaviour {
     public void GenerateResults()
     {
         List<Box> results = new List<Box>();
-        int trueBox = Random.Range(0, 5);
+        m_trueBox = Random.Range(0, 5);
+
+        //check wether I should hide the correct box based on guesses
+        bool hide = false;
+        for (int j = 0; j < m_guessedFeatures.Length; j++)
+        {
+            if (m_guessedFeatures[j] != -1)
+            {
+                if (m_guessedFeatures[j] != m_selectedBox.m_features[j])
+                {
+                    hide = true;
+                    m_trueBox = -1;
+                    break;
+                }
+            }
+        }
+
         for (int i = 0; i < 5; i++)
         {
-            if (i == trueBox)
+            if (i == m_trueBox && !hide)
                 results.Add(m_selectedBox);
             else
             {
@@ -141,10 +196,20 @@ public class CLI : MonoBehaviour {
         }
 
         m_CLItext.text = "";
-        foreach(Box box in results)
+        for(int i = 0; i < results.Count; i++)
         {
-            m_CLItext.text += "@> " + DescribeBox(box.m_features);
+            m_CLItext.text += i + "> " + DescribeBox(results[i].m_features);
         }
-        Debug.Log("Selected box is number " + (trueBox + 1).ToString());
+        Debug.Log("Selected box is number " + (m_trueBox).ToString());
+    }
+
+    public void ExecuteCommand()
+    {
+        if (!ParseCommand())
+            m_CLItext.text = "Could not recognise the syntax or the command, type help to visualize a list of commands.";
+        else
+        {
+            GenerateResults();
+        }
     }
 }
