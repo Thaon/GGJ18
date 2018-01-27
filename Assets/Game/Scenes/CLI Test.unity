@@ -979,3 +979,5 @@ MonoBehaviour:
   m_names: []
   m_icons: []
   m_productNames: []
+  m_correctlyGuessed: 0
+  m_points: 0
