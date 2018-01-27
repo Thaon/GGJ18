@@ -84,6 +84,11 @@ public class CLI : MonoBehaviour {
 
         switch (comm[0].ToLower())
         {
+            case "help":
+                m_CLItext.text = "The following filters can be added to the search algorithm: \n - SIZE [small | medium | big] \n - SHAPE [box | tube | pyramid] \n - COLOUR [ multiple ] \n - NAME [ multiple, initials ] \n - ICON [ multiple ] \n - PRODUCT [ multiple ]";
+                commandFound = true;
+                break;
+
             case "reset":
                 m_guessedFeatures = new int[] { -1, -1, -1, -1, -1, -1 };
                 commandFound = true;
@@ -205,11 +210,18 @@ public class CLI : MonoBehaviour {
 
     public void ExecuteCommand()
     {
-        if (!ParseCommand())
-            m_CLItext.text = "Could not recognise the syntax or the command, type help to visualize a list of commands.";
-        else
+        string command = m_CLIinput.text;
+        string[] comm = command.Split(' ');
+        if (comm[0].ToLower() != "help")
         {
-            GenerateResults();
+            if (!ParseCommand())
+                m_CLItext.text = "Could not recognise the syntax or the command, type help to visualize a list of commands.";
+            else
+            {
+                GenerateResults();
+            }
         }
+        else
+            ParseCommand();
     }
 }
