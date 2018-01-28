@@ -8152,7 +8152,7 @@ MonoBehaviour:
   m_waypoints:
   - {fileID: 765969937}
   - {fileID: 1151752433}
-  m_timeUntilDestruction: 60
+  m_timeUntilDestruction: 3
   m_lives: 3
 --- !u!4 &565429485
 Transform:
@@ -27215,8 +27215,8 @@ RectTransform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 2078949263}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 521, y: 309, z: 0}
-  m_LocalScale: {x: 2.06, y: 2.06, z: 2.06}
+  m_LocalPosition: {x: 688, y: 280, z: 0}
+  m_LocalScale: {x: 1.8666667, y: 1.8666667, z: 1.8666667}
   m_Children:
   - {fileID: 885494309}
   - {fileID: 1614959140}
