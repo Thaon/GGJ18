@@ -14,6 +14,7 @@ public class BoxCustomizer : MonoBehaviour {
     public bool m_canMove = true;
     public bool m_hasTag = false;
     public float m_timeUntilDestruction;
+    public GameObject m_effect;
 
     private Box m_selectedBox;
     private Material m_mat;
@@ -38,8 +39,14 @@ public class BoxCustomizer : MonoBehaviour {
         m_timerText = GameObject.Find("TimerText").GetComponent<Text>();
         m_timer = m_timeUntilDestruction;
     }
-	
-	void Update ()
+
+    private void OnDestroy()
+    {
+        GameObject go = Instantiate(m_effect, transform.position, Quaternion.identity);
+        Destroy(go, 3);
+    }
+
+    void Update ()
     {
 		if (m_canMove)
         {

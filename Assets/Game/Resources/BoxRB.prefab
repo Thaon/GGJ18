@@ -1008,6 +1008,7 @@ MonoBehaviour:
   m_canMove: 1
   m_hasTag: 0
   m_timeUntilDestruction: 0
+  m_effect: {fileID: 100002, guid: f7efb0d9df2264096af57128df85dddb, type: 2}
   m_timer: 0
 --- !u!114 &114576289175597628
 MonoBehaviour:
