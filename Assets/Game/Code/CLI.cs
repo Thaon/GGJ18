@@ -136,6 +136,8 @@ public class CLI : MonoBehaviour {
             //remove overlay and activate input box
             m_CommandsDescription.SetActive(false);
             m_CLIinput.gameObject.SetActive(true);
+            m_CLIinput.Select();
+            m_CLIinput.ActivateInputField();
         }
     }
 

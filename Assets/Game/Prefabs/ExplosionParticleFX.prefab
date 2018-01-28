@@ -21,8 +21,8 @@ GameObject:
   - component: {fileID: 4683429530095680}
   - component: {fileID: 198086608123601536}
   - component: {fileID: 199716174598013190}
-  - component: {fileID: 82178713299290190}
   - component: {fileID: 82185833117049176}
+  - component: {fileID: 82178713299290190}
   m_Layer: 0
   m_Name: ExplosionParticleFX
   m_TagString: Untagged
@@ -53,7 +53,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 0901428073704cc439d15a77f258e819, type: 3}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0
@@ -132,7 +132,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: ebbea0e4570f70d4082dc25eb812fe0b, type: 3}
+  m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1

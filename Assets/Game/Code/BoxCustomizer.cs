@@ -26,6 +26,7 @@ public class BoxCustomizer : MonoBehaviour {
     public AudioClip m_stoppedClip;
     public AudioClip m_rightClip;
     public AudioClip m_wrongClip;
+    private bool m_rightGuess = false;
 
     private AudioSource m_source;
 
@@ -51,6 +52,10 @@ public class BoxCustomizer : MonoBehaviour {
     private void OnDestroy()
     {
         GameObject go = Instantiate(m_effect, transform.GetComponentInChildren<BoxCollider>().gameObject.transform.position, Quaternion.identity);
+        if (m_rightGuess)
+            go.GetComponent<AudioSource>().PlayOneShot(m_rightClip);
+        else
+            go.GetComponent<AudioSource>().PlayOneShot(m_wrongClip);
         Destroy(go, 3);
     }
 
@@ -72,6 +77,7 @@ public class BoxCustomizer : MonoBehaviour {
                 {
                     m_source.Stop();
                     m_source.PlayOneShot(m_stoppedClip);
+                    StartCoroutine(StopSounds());
                 }
             }
         }
@@ -82,13 +88,12 @@ public class BoxCustomizer : MonoBehaviour {
             if (m_hasTag && FindObjectOfType<CLI>().m_correctlyGuessed)
             {
                 FindObjectOfType<CLI>().m_points += 100;
-                m_source.PlayOneShot(m_rightClip);
+                m_rightGuess = true;
             }
             else
             {
                 FindObjectOfType<BoxSpawner>().RemoveLife();
                 FindObjectOfType<CLI>().m_points -= 50;
-                m_source.PlayOneShot(m_wrongClip);
             }
 
             Debug.Log("Points: " + FindObjectOfType<CLI>().m_points);
@@ -111,6 +116,12 @@ public class BoxCustomizer : MonoBehaviour {
             }
         }
 	}
+
+    IEnumerator StopSounds()
+    {
+        yield return new WaitForSeconds(0.5f);
+        m_source.Stop();
+    }
 
     private void SetSize(string size)
     {
