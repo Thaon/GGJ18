@@ -3,7 +3,7 @@ television
 console
 lego
 books
-sex toys
+toys
 uranium
 dog
 dvd
