@@ -40,6 +40,7 @@ public class BoxSpawner : MonoBehaviour {
         m_boxInstance = Instantiate(m_boxPrefab, m_spawningPosition.position, Quaternion.identity);
         m_boxInstance.GetComponent<BoxCustomizer>().m_waypoints = m_waypoints;
         m_boxInstance.GetComponent<BoxCustomizer>().m_timeUntilDestruction = m_timeUntilDestruction;
+        m_timeUntilDestruction -= 5.0f;
         m_gameStarted = true;
     }
 
