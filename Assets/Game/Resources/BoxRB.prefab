@@ -590,7 +590,7 @@ MeshRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1543434479262960}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -906,6 +906,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ef4a50cb8cb05640b2f28dc3f05da2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_attachedmaterial: {fileID: 2100000, guid: 3f5766a8b67794141ac19c1a51d27083, type: 2}
 --- !u!114 &114469871042991994
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1006,6 +1007,8 @@ MonoBehaviour:
   m_waypoints: []
   m_canMove: 1
   m_hasTag: 0
+  m_timeUntilDestruction: 0
+  m_timer: 0
 --- !u!114 &114576289175597628
 MonoBehaviour:
   m_ObjectHideFlags: 1

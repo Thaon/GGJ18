@@ -38,7 +38,7 @@ public class CLI : MonoBehaviour {
 
     public int m_points = 0;
     private Text m_pointsTxt;
-
+    private Text m_playerInfoTxt;
 
     private int m_trueBox;
     private int[] m_guessedFeatures = { -1, -1, -1, -1, -1, -1 };
@@ -61,6 +61,7 @@ public class CLI : MonoBehaviour {
         m_productNames = ReadFeaturesFromFile("productnames.txt");
 
         m_pointsTxt = GameObject.Find("PointsText").GetComponent<Text>();
+        m_playerInfoTxt = GameObject.Find("PlayerInfo").GetComponent<Text>();
 
         m_CLIinput.gameObject.SetActive(false);
     }
@@ -68,7 +69,14 @@ public class CLI : MonoBehaviour {
     private void FixedUpdate()
     {
         if (m_pointsTxt != null)
+        {
             m_pointsTxt.text = "Points: " + m_points;
+            if (FindObjectOfType<BoxCustomizer>())
+                m_playerInfoTxt.text = "Time Left : " + FindObjectOfType<BoxCustomizer>().m_timer + " / Attempts Left : " + FindObjectOfType<BoxSpawner>().m_lives;
+            else
+                m_playerInfoTxt.text = "Attempts Left : " + FindObjectOfType<BoxSpawner>().m_lives;
+        }
+
 
         if (m_commandParsing == -1) //we have no command
         {

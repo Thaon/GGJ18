@@ -19,7 +19,7 @@ public class BoxCustomizer : MonoBehaviour {
     private Material m_mat;
     private int m_waypointsCounter = 0;
     private Text m_timerText;
-    private float m_timer = 0;
+    public float m_timer = 0;
 
     #endregion
 
@@ -47,7 +47,6 @@ public class BoxCustomizer : MonoBehaviour {
                 transform.position = Vector3.MoveTowards(transform.position, m_waypoints[m_waypointsCounter].position, 5 * Time.deltaTime);
             else
             {
-                StartCoroutine(KillObject());
                 m_waypointsCounter ++;
                 m_canMove = false;
             }
@@ -77,14 +76,14 @@ public class BoxCustomizer : MonoBehaviour {
         {
             m_timer -= Time.deltaTime;
             m_timerText.text = Mathf.RoundToInt(m_timer).ToString();
+
+            if (m_timer <= 0)
+            {
+                FindObjectOfType<BoxSpawner>().RemoveLife();
+                Destroy(this.gameObject);
+            }
         }
 	}
-
-    private IEnumerator KillObject()
-    {
-        yield return new WaitForSeconds(m_timeUntilDestruction);
-        FindObjectOfType<BoxSpawner>().RemoveLife();
-    }
 
     private void SetSize(string size)
     {
@@ -118,14 +117,6 @@ public class BoxCustomizer : MonoBehaviour {
 
             case "green":
                 m_mat.color = Color.green;
-                break;
-
-            case "white":
-                m_mat.color = Color.white;
-                break;
-
-            case "grey":
-                m_mat.color = Color.grey;
                 break;
 
             case "black":
