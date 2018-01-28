@@ -8435,7 +8435,7 @@ MonoBehaviour:
   m_waypoints:
   - {fileID: 765969937}
   - {fileID: 1151752433}
-  m_timeUntilDestruction: 3
+  m_timeUntilDestruction: 60
   m_lives: 3
   m_incomingClip: {fileID: 8300000, guid: 379cf0d8d82d10141a51423046c89650, type: 3}
 --- !u!4 &565429485
