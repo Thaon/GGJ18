@@ -3,6 +3,7 @@ using System.IO;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class Box
 {
@@ -78,6 +79,11 @@ public class CLI : MonoBehaviour {
                 m_playerInfoTxt.text = "Attempts Left : " + FindObjectOfType<BoxSpawner>().m_lives;
         }
 
+        if (SceneManager.GetActiveScene().name == "GameOverScene")
+        {
+            FindObjectOfType<CLI>().m_CLItext.text = "Game Over, your final score is: " + FindObjectOfType<CLI>().m_points.ToString();
+            return;
+        }
 
         if (m_commandParsing == -1) //we have no command
         {

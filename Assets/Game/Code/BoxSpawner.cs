@@ -55,7 +55,6 @@ public class BoxSpawner : MonoBehaviour {
         m_lives--;
         if (m_lives <= 0)
         {
-            FindObjectOfType<CLI>().m_CLItext.text = "Game Over, your final score is: " + FindObjectOfType<CLI>().m_points.ToString();
             SceneManager.LoadScene("GameOverScene");
         }
     }
