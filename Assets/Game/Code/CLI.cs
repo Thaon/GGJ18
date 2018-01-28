@@ -35,6 +35,7 @@ public class CLI : MonoBehaviour {
     public List<string> m_productNames;
     public Box m_selectedBox;
     public bool m_correctlyGuessed = false;
+    private bool m_started = false;
 
     public int m_points = 0;
     private Text m_pointsTxt;
@@ -107,8 +108,12 @@ public class CLI : MonoBehaviour {
 
             if (Input.GetKeyDown(KeyCode.Return)) //start
             {
-                GenerateNewBox();
-                FindObjectOfType<BoxSpawner>().SpawnBox();
+                if (!m_started)
+                {
+                    GenerateNewBox();
+                    FindObjectOfType<BoxSpawner>().SpawnBox();
+                    m_started = true;
+                }
             }
 
             if (Input.GetKeyDown(KeyCode.H)) //help
