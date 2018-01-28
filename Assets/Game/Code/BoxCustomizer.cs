@@ -42,7 +42,7 @@ public class BoxCustomizer : MonoBehaviour {
 
     private void OnDestroy()
     {
-        GameObject go = Instantiate(m_effect, transform.position, Quaternion.identity);
+        GameObject go = Instantiate(m_effect, transform.GetComponentInChildren<BoxCollider>().gameObject.transform.position, Quaternion.identity);
         Destroy(go, 3);
     }
 
