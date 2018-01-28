@@ -1,12 +1,12 @@
-Nuclear Bombs
-Television
-Console
-Lego
-Books
-Sex Toys
-Uranium
-Dog
-DVD
-Snake
-Dinosaur Toy
-Car
+nuclear bombs
+television
+console
+lego
+books
+sex toys
+uranium
+dog
+dvd
+snake
+dinosaur
+car

@@ -25,6 +25,7 @@ public class CLI : MonoBehaviour {
 
     public Text m_CLItext;
     public InputField m_CLIinput;
+    public GameObject m_CommandsDescription;
     public int m_maxResults;
     public List<string> m_sizes;
     public List<string> m_shapes;
@@ -42,6 +43,7 @@ public class CLI : MonoBehaviour {
     private int m_trueBox;
     private int[] m_guessedFeatures = { -1, -1, -1, -1, -1, -1 };
     private char m_guessedInitial = ' ';
+    private int m_commandParsing = -1;
 
     #endregion
 
@@ -60,13 +62,68 @@ public class CLI : MonoBehaviour {
 
         m_pointsTxt = GameObject.Find("PointsText").GetComponent<Text>();
 
-        GenerateNewBox();
+        m_CLIinput.gameObject.SetActive(false);
     }
 
     private void FixedUpdate()
     {
         if (m_pointsTxt != null)
             m_pointsTxt.text = "Points: " + m_points;
+
+        if (m_commandParsing == -1) //we have no command
+        {
+            if (Input.GetKeyDown(KeyCode.S)) //size
+            {
+                m_commandParsing = 0;
+            }
+
+            if (Input.GetKeyDown(KeyCode.C)) //colour
+            {
+                m_commandParsing = 1;
+            }
+
+            if (Input.GetKeyDown(KeyCode.N)) //name initial
+            {
+                m_commandParsing = 2;
+            }
+
+            if (Input.GetKeyDown(KeyCode.I)) //image
+            {
+                m_commandParsing = 3;
+            }
+
+            if (Input.GetKeyDown(KeyCode.P)) //prodct name
+            {
+                m_commandParsing = 4;
+            }
+
+            if (Input.GetKeyDown(KeyCode.Return)) //start
+            {
+                GenerateNewBox();
+                FindObjectOfType<BoxSpawner>().SpawnBox();
+            }
+
+            if (Input.GetKeyDown(KeyCode.H)) //help
+            {
+                m_commandParsing = 6;
+            }
+
+            if (Input.GetKeyDown(KeyCode.R)) //reset
+            {
+                m_commandParsing = 7;
+            }
+
+            if (Input.GetKeyDown(KeyCode.Tab)) //print tag
+            {
+                m_commandParsing = 8;
+            }
+        }
+        else
+        {
+            //remove overlay and activate input box
+            m_CommandsDescription.SetActive(false);
+            m_CLIinput.gameObject.SetActive(true);
+        }
     }
 
     public void GenerateNewBox()
@@ -101,29 +158,23 @@ public class CLI : MonoBehaviour {
     public bool ParseCommand()
     {
         string command = m_CLIinput.text;
-        string[] comm = command.Split(' ');
         bool commandFound = false;
 
-        switch (comm[0].ToLower())
+        switch (m_commandParsing)
         {
-            case "start":
-                FindObjectOfType<BoxSpawner>().SpawnBox();
+            case 6:
+                m_CLItext.text = "The following filters can be added to the search algorithm: \n - SIZE [S] \n  - COLOUR [C] \n - NAME [N] \n - ICON [I] \n - PRODUCT [P] \n - PRINT [TAB] \n - RESET FILTERS [R]";
                 commandFound = true;
                 break;
 
-            case "help":
-                m_CLItext.text = "The following filters can be added to the search algorithm: \n - SIZE [small | medium | big] \n  - COLOUR [ multiple ] \n - NAME [ multiple, initials ] \n - ICON [ multiple ] \n - PRODUCT [ multiple ]";
-                commandFound = true;
-                break;
-
-            case "reset":
+            case 7:
                 m_guessedInitial = ' ';
                 m_guessedFeatures = new int[] { -1, -1, -1, -1, -1, -1 };
                 commandFound = true;
                 break;
 
-            case "size":
-                m_guessedFeatures[0] = GetIdFromString(comm[1].ToLower(), m_sizes);
+            case 0:
+                m_guessedFeatures[0] = GetIdFromString(command.ToLower(), m_sizes);
                 commandFound = true;
                 break;
 
@@ -132,30 +183,30 @@ public class CLI : MonoBehaviour {
             //    commandFound = true;
             //    break;
 
-            case "colour":
-                m_guessedFeatures[2] = GetIdFromString(comm[1].ToLower(), m_colours);
+            case 1:
+                m_guessedFeatures[2] = GetIdFromString(command.ToLower(), m_colours);
                 commandFound = true;
                 break;
 
-            case "name":
+            case 2:
                 //initials to full name mapping
-                m_guessedInitial = comm[1].ToLower()[0];
-                m_guessedFeatures[3] = MapInitials(comm[1].ToLower()[0]);
+                m_guessedInitial = command.ToLower()[0];
+                m_guessedFeatures[3] = MapInitials(m_guessedInitial);
                 commandFound = true;
                 break;
 
-            case "icon":
-                m_guessedFeatures[4] = GetIdFromString(comm[1].ToLower(), m_icons);
+            case 3:
+                m_guessedFeatures[4] = GetIdFromString(command.ToLower(), m_icons);
                 commandFound = true;
                 break;
 
-            case "product":
-                m_guessedFeatures[5] = GetIdFromString(comm[1].ToLower(), m_productNames);
+            case 4:
+                m_guessedFeatures[5] = GetIdFromString(command.ToLower(), m_productNames);
                 commandFound = true;
                 break;
 
-            case "print":
-                int toPrint = int.Parse(comm[1]);
+            case 8:
+                int toPrint = int.Parse(command);
                 m_CLItext.text = "Printing tag for box number " + toPrint;
 
                 if (toPrint == m_trueBox)
@@ -197,12 +248,10 @@ public class CLI : MonoBehaviour {
         string[] name = m_names[m_selectedBox.m_features[3]].Split(' ');
         if (name[0][0] == value || name[1][0] == value)
         {
-            m_guessedInitial = value;
             return m_selectedBox.m_features[3];
         }
         else
         {
-            m_guessedInitial = value;
             return -1;
         }
     }
@@ -268,12 +317,12 @@ public class CLI : MonoBehaviour {
                     if (m_guessedFeatures[j] != -1)
                     {
                         b.m_features[j] = m_guessedFeatures[j];
-
+                    }
+                    else if (m_guessedFeatures[j] == -1 && m_guessedInitial != ' ')
                         if (j == 3) //name
                         {
                             b.m_features[j] = GetNameWithInitial();
                         }
-                    }
                 }
                 results.Add(b);
             }
@@ -289,18 +338,10 @@ public class CLI : MonoBehaviour {
 
     public void ExecuteCommand()
     {
-        string command = m_CLIinput.text;
-        string[] comm = command.Split(' ');
-        if (comm[0].ToLower() != "help")
-        {
-            if (!ParseCommand())
-                m_CLItext.text = "Could not recognise the syntax or the command, type help to visualize a list of commands.";
-            else
-            {
-                GenerateResults();
-            }
-        }
-        else
-            ParseCommand();
+        ParseCommand();
+        GenerateResults();
+        m_CommandsDescription.SetActive(true);
+        m_CLIinput.gameObject.SetActive(false);
+        m_commandParsing = -1;
     }
 }
