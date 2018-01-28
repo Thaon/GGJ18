@@ -73,7 +73,7 @@ public class CLI : MonoBehaviour {
         {
             m_pointsTxt.text = "Points: " + m_points;
             if (FindObjectOfType<BoxCustomizer>())
-                m_playerInfoTxt.text = "Time Left : " + FindObjectOfType<BoxCustomizer>().m_timer + " / Attempts Left : " + FindObjectOfType<BoxSpawner>().m_lives;
+                m_playerInfoTxt.text = "Time Left : " + Mathf.RoundToInt(FindObjectOfType<BoxCustomizer>().m_timer) + " / Attempts Left : " + FindObjectOfType<BoxSpawner>().m_lives;
             else
                 m_playerInfoTxt.text = "Attempts Left : " + FindObjectOfType<BoxSpawner>().m_lives;
         }
