@@ -17,13 +17,18 @@ public class BoxSpawner : MonoBehaviour {
     private GameObject m_boxPrefab;
     private bool m_gameStarted = false;
 
+
+    public AudioClip m_incomingClip;
+    private AudioSource m_source;
+
     #endregion
 
 
     void Start ()
     {
         m_boxPrefab = Resources.Load("BoxRB") as GameObject;
-	}
+        m_source = GetComponent<AudioSource>();
+    }
 	
 	void Update ()
     {
@@ -36,6 +41,7 @@ public class BoxSpawner : MonoBehaviour {
 
     public void SpawnBox()
     {
+        m_source.PlayOneShot(m_incomingClip);
         FindObjectOfType<CLI>().GenerateNewBox();
         m_boxInstance = Instantiate(m_boxPrefab, m_spawningPosition.position, Quaternion.identity);
         m_boxInstance.GetComponent<BoxCustomizer>().m_waypoints = m_waypoints;
@@ -48,6 +54,9 @@ public class BoxSpawner : MonoBehaviour {
     {
         m_lives--;
         if (m_lives <= 0)
+        {
+            FindObjectOfType<CLI>().m_CLItext.text = "Game Over, your final score is: " + FindObjectOfType<CLI>().m_points.ToString();
             SceneManager.LoadScene("GameOverScene");
+        }
     }
 }

@@ -22,6 +22,13 @@ public class BoxCustomizer : MonoBehaviour {
     private Text m_timerText;
     public float m_timer = 0;
 
+    public AudioClip m_conveyorClip;
+    public AudioClip m_stoppedClip;
+    public AudioClip m_rightClip;
+    public AudioClip m_wrongClip;
+
+    private AudioSource m_source;
+
     #endregion
 
     void Start ()
@@ -35,6 +42,7 @@ public class BoxCustomizer : MonoBehaviour {
         m_nameTxt.text = GetRandomInitial(cli.m_names[m_selectedBox.m_features[3]]).ToString();
         m_iconImg.sprite = m_images[m_selectedBox.m_features[4]];
         m_productNameTxt.text = cli.m_productNames[m_selectedBox.m_features[5]];
+        m_source = GetComponent<AudioSource>();
 
         m_timerText = GameObject.Find("TimerText").GetComponent<Text>();
         m_timer = m_timeUntilDestruction;
@@ -51,11 +59,20 @@ public class BoxCustomizer : MonoBehaviour {
 		if (m_canMove)
         {
             if (Vector3.Distance(transform.position, m_waypoints[m_waypointsCounter].transform.position) > .1f)
+            {
                 transform.position = Vector3.MoveTowards(transform.position, m_waypoints[m_waypointsCounter].position, 5 * Time.deltaTime);
+                if (!m_source.isPlaying)
+                    m_source.PlayOneShot(m_conveyorClip);
+            }
             else
             {
-                m_waypointsCounter ++;
+                m_waypointsCounter++;
                 m_canMove = false;
+                if (m_source.isPlaying)
+                {
+                    m_source.Stop();
+                    m_source.PlayOneShot(m_stoppedClip);
+                }
             }
         }
 
@@ -63,11 +80,15 @@ public class BoxCustomizer : MonoBehaviour {
         {
             //we reached the last point, check if there is a tag on the box and if it is correct
             if (m_hasTag && FindObjectOfType<CLI>().m_correctlyGuessed)
+            {
                 FindObjectOfType<CLI>().m_points += 100;
+                m_source.PlayOneShot(m_rightClip);
+            }
             else
             {
                 FindObjectOfType<BoxSpawner>().RemoveLife();
                 FindObjectOfType<CLI>().m_points -= 50;
+                m_source.PlayOneShot(m_wrongClip);
             }
 
             Debug.Log("Points: " + FindObjectOfType<CLI>().m_points);
@@ -75,7 +96,6 @@ public class BoxCustomizer : MonoBehaviour {
             //remove the box
             FindObjectOfType<BoxSpawner>().m_boxInstance = null;
             FindObjectOfType<CLI>().GenerateNewBox();
-
             Destroy(this.gameObject);
         }
 
