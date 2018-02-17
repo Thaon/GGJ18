@@ -37,6 +37,7 @@ public class CLI : MonoBehaviour {
     public Box m_selectedBox;
     public bool m_correctlyGuessed = false;
     private bool m_started = false;
+    public GameObject m_pcCamera;
 
     public int m_points = 0;
     private Text m_pointsTxt;
@@ -149,6 +150,8 @@ public class CLI : MonoBehaviour {
 
     public void GenerateNewBox()
     {
+        m_pcCamera.SetActive(true);
+
         //reset CLI variables
         m_guessedInitial = ' ';
         m_guessedFeatures = new int[] { -1, -1, -1, -1, -1, -1 };

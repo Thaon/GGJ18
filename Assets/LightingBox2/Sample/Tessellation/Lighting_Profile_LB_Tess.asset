@@ -11,7 +11,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09549af41255a3d46b8b500a63f93e23, type: 3}
   m_Name: Lighting_Profile_LB_Tess
   m_EditorClassIdentifier: 
-  mainCameraName: Main Camera
+  mainCameraName: Camera (eye)
   objectName: LightingProfile
   postProcessingProfile: {fileID: 11400000, guid: 56cb660e906b5d94ba177dfe69f77830,
     type: 2}
@@ -45,11 +45,11 @@ MonoBehaviour:
   mobileOptimizedBloom: 0
   bRotation: 0
   aoType: 0
-  aoRadius: 0.3
-  aoIntensity: 0.7
+  aoRadius: 0.1
+  aoIntensity: 0.4
   ambientOnly: 0
   aoColor: {r: 0, g: 0, b: 0, a: 1}
-  aoQuality: 3
+  aoQuality: 1
   vLight: 0
   vLightLevel: 1
   lightsShadow: 2
@@ -77,7 +77,7 @@ MonoBehaviour:
   colorGamma: {r: 0, g: 0, b: 0, a: 1}
   colorLift: {r: 0, g: 0, b: 0, a: 1}
   lut: {fileID: 0}
-  vignetteIntensity: 0.223
+  vignetteIntensity: 0.159
   CA_Intensity: 0.1
   mobileOptimizedChromattic: 0
   ssrQuality: 0
@@ -120,10 +120,10 @@ MonoBehaviour:
   MotionBlur_Enabled: 0
   Vignette_Enabled: 1
   Chromattic_Enabled: 1
-  SSR_Enabled: 1
+  SSR_Enabled: 0
   ST_SSR_Enabled: 0
-  ambientState: 0
-  sunState: 0
+  ambientState: 1
+  sunState: 1
   lightSettingsState: 0
   cameraState: 0
   profileState: 1
@@ -136,10 +136,10 @@ MonoBehaviour:
   colorState: 1
   bloomState: 1
   aaState: 0
-  aoState: 0
+  aoState: 1
   motionBlurState: 0
-  vignetteState: 0
-  chromatticState: 0
+  vignetteState: 1
+  chromatticState: 1
   ssrState: 1
   st_ssrState: 0
   foliageState: 0
